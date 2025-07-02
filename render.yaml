@@ -1,0 +1,9 @@
+# render.yaml
+services:
+  - type: web
+    name: offert-backend
+    env: docker
+    plan: free
+    region: frankfurt
+    dockerfilePath: ./Dockerfile
+    branch: main
