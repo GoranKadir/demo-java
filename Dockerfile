@@ -1,21 +1,19 @@
-# Dockerfile
 FROM eclipse-temurin:21-jdk-alpine
 
-# Ange arbetsmapp i containern
 WORKDIR /app
 
-# Kopiera pom.xml och wrapper-filer först (för att cacha dependencies)
-COPY pom.xml mvnw ./
-COPY .mvn .mvn
+# Kopiera filerna först
+COPY . .
 
-# Ladda ner dependencies
+# ✅ Ge körbar rättighet till mvnw
+RUN chmod +x mvnw
+
+# ✅ Förbered dependencies (valfritt men bra)
 RUN ./mvnw dependency:go-offline
 
-# Kopiera resten av koden
-COPY src ./src
-
-# Bygg applikationen
+# ✅ Bygg appen
 RUN ./mvnw clean package -DskipTests
 
-# Starta jar-filen
+EXPOSE 8080
+
 CMD ["java", "-jar", "target/demo-0.0.1-SNAPSHOT.jar"]
